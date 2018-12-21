@@ -5,12 +5,48 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>持名法州主页</title>
     <link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="../themes/IconExtension.css">
+    <link rel="stylesheet" type="text/css" href="../themes/icon.css">
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/datagrid-detailview.js"></script>
+    <script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="../js/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
         <!--菜单处理-->
+        $(function () {
+            $.get("${pageContext.request.contextPath}/menu/queryAll", function (result) {
+                $.each(result, function (index, first) {
+                    var a = "";
+                    $.each(first.list, function (index1, second) {
+                        a += "<p><a id=\"btn\" href=\"#\" class=\"easyui-linkbutton\" onclick=\"addTabs('" + second.title + "','" + second.iconcls + "','" + second.url + "')\" data-options=\"iconCls:'icon-search'\"></a>  \n" + second.title + "</p>";
+                    })
+                    $('#aa').accordion('add', {
+                        title: first.title,
+                        iconCls: first.iconcls,
+                        content: a,
+                        selected: false
+                    });
+                })
+            }, "json");
+
+        });
+
+        function addTabs(title, iconcls, url) {
+
+            var a = $('#tt').tabs("exists", title);
+            if (a) {
+                $('#tt').tabs("select", title);
+            } else {
+                // 添加一个未选中状态的选项卡面板
+                $('#tt').tabs('add', {
+                    title: title,
+                    iconCls: iconcls,
+                    href: "${pageContext.request.contextPath}" + url,
+                    selected: true,
+                    closable: true
+                });
+            }
+        }
     </script>
 
 </head>
@@ -19,8 +55,10 @@
     <div style="font-size: 24px;color: #FAF7F7;font-family: 楷体;font-weight: 900;width: 500px;float:left;padding-left: 20px;padding-top: 10px">
         持名法州后台管理系统
     </div>
-    <div style="font-size: 16px;color: #FAF7F7;font-family: 楷体;width: 300px;float:right;padding-top:15px">欢迎您:xxxxx
-        &nbsp;<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改密码</a>&nbsp;&nbsp;<a href="#"
+    <div style="font-size: 16px;color: #FAF7F7;font-family: 楷体;width: 300px;float:right;padding-top:15px">
+        欢迎您:${sessionScope.admin.name}
+        &nbsp;<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改密码</a>&nbsp;&nbsp;<a
+            href="${pageContext.request.contextPath}/admin/exit"
                                                                                                               class="easyui-linkbutton"
                                                                                                               data-options="iconCls:'icon-01'">退出系统</a>
     </div>

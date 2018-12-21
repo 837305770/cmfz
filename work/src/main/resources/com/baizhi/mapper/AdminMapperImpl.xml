@@ -4,5 +4,6 @@
     <select id="login" resultType="Admin">
         select *
         from c_admin
+        where name = #{name}
     </select>
 </mapper>
